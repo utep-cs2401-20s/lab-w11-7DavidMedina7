@@ -1,21 +1,12 @@
 public class newSorting {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
 
-        //int[] array = {0, 3, 4, 5, 7};
-        //int size = 1;
-       //new newSorting(array, size);
+        int[] arrayToBeSorted = {4, 3, 5, 2, 1, 3};
+        int size = 3;
 
-        // ** Testing merge **
-        int[] array = new int[10];
-        int[] left = {0, 1, 3, 4, 6, 9}; // 0, 1, 3, 4, 6, 9
-        int[] right = {2, 5, 7, 8}; // 2, 5, 7, 8
+        new newSorting(arrayToBeSorted, size);
 
-        mergeSortedHalves(array, left, right);
-
-        for(int i = 0; i < array.length; i++) {
-            System.out.print(array[i] + " ");
-        }
     }
 
      newSorting(int[] array, int size) {
@@ -23,8 +14,12 @@ public class newSorting {
         // Base Case: If the length of the array is less or equal to size
         if(array.length <= size) {
 
+            // Initializing start and end variables
+            int start = array[0];
+            int end = array.length - 1;
+
             // Calling the quickSort Method
-            quickSort(array);
+            quickSort(array, start, end);
 
             // Else split the array until the base case is met
         } else {
@@ -46,16 +41,67 @@ public class newSorting {
                 rightSide[i] = array[middleIndex + i];
             }
 
+            // Method call on the left array
             new newSorting(leftSide, size);
+
+            // Method call on the right array
             new newSorting(rightSide, size);
+
+            // Merging left and right arrays
             mergeSortedHalves(array, leftSide, rightSide);
 
         }
     }
 
-    public void quickSort(int[] array) {}
+    // Recursively sort utilizing quick sort
+    void quickSort(int[] array, int start, int end) {
 
-    public static void mergeSortedHalves(int[] array, int[] leftSide, int[] rightSide) {
+        // Checks if lowIndex is smaller than the highIndex; if not, the array is sorted.
+        if(start < end) {
+
+            // Making the "middle" index of the array
+            int partitionIndex = partition(array, start, end);
+
+            // Sorting the left side of the array
+            quickSort(array, start, partitionIndex - 1);
+
+            // Sorting the right side of the array
+            quickSort(array, partitionIndex + 1, end);
+        }
+    }
+
+    // Helper method to aid and partition array from quickSort() method
+    int partition(int[] array, int start, int end) {
+
+        // Initializing pivot to the array at start
+        int pivot = array[start];
+
+        // Loop to go through array and alter
+        for(int i = start; i < end; i++) {
+
+            // If current element is smaller than the pivot
+            if(array[i] <= pivot) {
+
+                // Increment start
+                start++;
+
+                // Swap pivot with current element
+                int temp = pivot;
+                pivot = array[i];
+                array[i] = temp;
+            }
+        }
+
+        // Swap pivot with end
+        int temp = array[end + 1];
+        array[end + 1] = array[start];
+        array[start] = temp;
+
+        // Returning the "middle" index
+        return end + 1;
+    }
+
+    void mergeSortedHalves(int[] array, int[] leftSide, int[] rightSide) {
 
         // Pointers pointing at the first element of each left and right arrays
         int leftPointer = 0;
@@ -98,6 +144,7 @@ public class newSorting {
 
                 // Increment left pointer
                 leftPointer++;
+
             } else if(leftSide[leftPointer] == rightSide[rightPointer]) {
 
                 // Place the left element into the original array
