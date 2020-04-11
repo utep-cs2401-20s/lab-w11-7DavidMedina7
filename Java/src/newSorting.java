@@ -1,21 +1,17 @@
 public class newSorting {
 
-    public static void main(String[] args){
+     public void newSorting(int[] array, int size) {
 
-        int[] arrayToBeSorted = {4, 3, 5, 2, 1, 3};
-        int size = 3;
-
-        new newSorting(arrayToBeSorted, size);
-
-    }
-
-     newSorting(int[] array, int size) {
+        // Base Case: The array is empty
+        if(array.length < 1) {
+            return;
+        }
 
         // Base Case: If the length of the array is less or equal to size
         if(array.length <= size) {
 
             // Initializing start and end variables
-            int start = array[0];
+            int start = 0;
             int end = array.length - 1;
 
             // Calling the quickSort Method
@@ -42,10 +38,10 @@ public class newSorting {
             }
 
             // Method call on the left array
-            new newSorting(leftSide, size);
+            newSorting(leftSide, size);
 
             // Method call on the right array
-            new newSorting(rightSide, size);
+            newSorting(rightSide, size);
 
             // Merging left and right arrays
             mergeSortedHalves(array, leftSide, rightSide);
@@ -54,10 +50,10 @@ public class newSorting {
     }
 
     // Recursively sort utilizing quick sort
-    void quickSort(int[] array, int start, int end) {
+    private void quickSort(int[] array, int start, int end) {
 
         // Checks if lowIndex is smaller than the highIndex; if not, the array is sorted.
-        if(start < end) {
+        if(start < end && start >= 0) {
 
             // Making the "middle" index of the array
             int partitionIndex = partition(array, start, end);
@@ -71,37 +67,42 @@ public class newSorting {
     }
 
     // Helper method to aid and partition array from quickSort() method
-    int partition(int[] array, int start, int end) {
+    private int partition(int[] array, int start, int end) {
 
         // Initializing pivot to the array at start
         int pivot = array[start];
 
         // Loop to go through array and alter
-        for(int i = start; i < end; i++) {
+        for(int i = start; i < end + 1; i++) {
 
             // If current element is smaller than the pivot
-            if(array[i] <= pivot) {
+            if(array[i] < pivot) {
+
+                // Swap pointers
+                int temp = array[i];
+                array[start] = temp;
 
                 // Increment start
                 start++;
 
-                // Swap pivot with current element
+                // Else if the element looking at is greater than the pivot
+            } else if (array[i] > pivot) {
+
+                // Swap pointers
                 int temp = pivot;
                 pivot = array[i];
-                array[i] = temp;
+                array[start] = temp;
+
+                // Increment start
+                start++;
             }
         }
 
-        // Swap pivot with end
-        int temp = array[end + 1];
-        array[end + 1] = array[start];
-        array[start] = temp;
-
         // Returning the "middle" index
-        return end + 1;
+        return end;
     }
 
-    void mergeSortedHalves(int[] array, int[] leftSide, int[] rightSide) {
+    private void mergeSortedHalves(int[] array, int[] leftSide, int[] rightSide) {
 
         // Pointers pointing at the first element of each left and right arrays
         int leftPointer = 0;
